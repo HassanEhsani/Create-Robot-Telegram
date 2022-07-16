@@ -1,11 +1,19 @@
-const { Telegraf } = require("telegraf");
+const { Telegraf, Markup } = require("telegraf");
 
 const bot = new Telegraf("5578827276:AAG5FGWbVPPR8DoAoG9lPvMauLn7RELwbCo");
 
-bot.use((ctx,next)=>{
-  ctx.reply("شما یک پیام ارسال کردید!"),
-  next()
-})
+const getUserRole = (user) => {
+  const roles = ["برنزی", "نقره ای", "طلایی"];
+  const index = Math.floor(Math.random() * roles.length);
+  return roles[index];
+};
+
+bot.use((ctx, next) => {
+  ctx.reply("شما یک پیام ارسال کردید!");
+  const role = getUserRole(ctx.message.from);
+  ctx.state.role = role;
+  next();
+});
 
 bot.start((ctx) => {
   //     console.log(ctx.message.from)
@@ -25,7 +33,9 @@ bot.start((ctx) => {
 });
 
 bot.command(["products", "Products", "محصولات"], (ctx) => {
-  ctx.reply("لیست محصولات را الان برایت فرستادم");
+  // ctx.reply("لیست محصولات را الان برایت فرستادم");
+  const role = ctx.state.role;
+  ctx.reply(`شما طرح ${role} را خریداری کردید پس`);
 });
 
 bot.hears(/^محصول/, (ctx) => {
@@ -59,12 +69,13 @@ bot.mention("@HassanEhsani_am", (ctx) =>
 bot.hashtag("تبلیغ", async (ctx) => {
   console.log(ctx.message);
   await ctx.deleteMessage(ctx.message.message_id);
-  const tempMessage = await ctx.reply(`کاربر عزیز  ${ctx.message.from.first_name} ارسال هشتگ در این گروه ممنوع است!
+  const tempMessage =
+    await ctx.reply(`کاربر عزیز  ${ctx.message.from.first_name} ارسال هشتگ در این گروه ممنوع است!
   در صورت تکرار شما از این گروه حذف می شوید!
   `);
-  setTimeout(()=>{
+  setTimeout(() => {
     ctx.deleteMessage(tempMessage.message_id);
-  },2500);
+  }, 2500);
 });
 
 bot.launch();
