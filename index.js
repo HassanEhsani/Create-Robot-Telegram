@@ -41,12 +41,25 @@ bot.help((ctx) => {
   ctx.reply("راهنما");
 });
 
-bot.on("text", (ctx) => ctx.reply("سلام شما یک متن فرستادید"));
+// bot.on("text", (ctx) => ctx.reply("سلام شما یک متن فرستادید"));
 bot.on("voice", (ctx) => ctx.reply("سلام شما یک صدا فرستادید"));
 bot.on("edited_message", (ctx) => {
-
-  console.log(ctx)
+  console.log(ctx);
   return ctx.reply("سلام شما ویرایش کردید");
+});
+
+bot.mention("@HassanEhsani_am", (ctx) =>
+  ctx.reply("سلام شما یک نفر را منشن کردید")
+);
+bot.hashtag("تبلیغ", async (ctx) => {
+  console.log(ctx.message);
+  await ctx.deleteMessage(ctx.message.message_id);
+  const tempMessage = await ctx.reply(`کاربر عزیز  ${ctx.message.from.first_name} ارسال هشتگ در این گروه ممنوع است!
+  در صورت تکرار شما از این گروه حذف می شوید!
+  `);
+  setTimeout(()=>{
+    ctx.deleteMessage(tempMessage.message_id);
+  },2500);
 });
 
 bot.launch();
