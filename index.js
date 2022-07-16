@@ -2,6 +2,11 @@ const { Telegraf } = require("telegraf");
 
 const bot = new Telegraf("5578827276:AAG5FGWbVPPR8DoAoG9lPvMauLn7RELwbCo");
 
+bot.use((ctx,next)=>{
+  ctx.reply("شما یک پیام ارسال کردید!"),
+  next()
+})
+
 bot.start((ctx) => {
   //     console.log(ctx.message.from)
   //   return ctx.reply("Right Now rain is stop"); this is TELEFRAF
