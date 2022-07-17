@@ -8,11 +8,25 @@ const getUserRole = (user) => {
   return roles[index];
 };
 
-bot.use((ctx, next) => {
-  ctx.reply("شما یک پیام ارسال کردید!");
+bot.on( "text",ctx => {
+  
+  ctx.reply("پیام", {
+    reply_markup: {
+      inline_keyboard: [
+        [
+          {
+            text: "click",
+            callback_data: "button click",
+          },
+        ],
+      ],
+    },
+  });
+
   const role = getUserRole(ctx.message.from);
   ctx.state.role = role;
-  next();
+  console.log("new message");
+  
 });
 
 bot.start((ctx) => {
@@ -36,6 +50,10 @@ bot.command(["products", "Products", "محصولات"], (ctx) => {
   // ctx.reply("لیست محصولات را الان برایت فرستادم");
   const role = ctx.state.role;
   ctx.reply(`شما طرح ${role} را خریداری کردید پس`);
+});
+
+bot.action("button click", (ctx) => {
+  ctx.reply("you clicked the button");
 });
 
 bot.hears(/^محصول/, (ctx) => {
