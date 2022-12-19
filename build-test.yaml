@@ -4,6 +4,10 @@
 name: Node.js Package
 
 on:
+  push:
+    branch: [ master ]
+  pull_request:
+    branch: [ master ]
   release:
     types: [created]
 
